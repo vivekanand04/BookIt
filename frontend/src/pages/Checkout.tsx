@@ -114,7 +114,7 @@ export default function Checkout() {
     <div className="min-h-screen bg-gray-50">
       <Header showSearch={false} />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
@@ -126,48 +126,49 @@ export default function Checkout() {
           Checkout
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr,1fr] gap-6 lg:items-start">
           {/* Left Section - Form */}
-          <div className="card p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Full Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full name
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  placeholder="Your name"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                />
-              </div>
+          <div className="bg-gray-100 rounded-lg p-5 lg:max-h-[280px]">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {/* Full Name and Email in Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Full name
+                  </label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    placeholder="Your name"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-1.5 text-sm bg-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
 
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Your name"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                />
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your name"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-1.5 text-sm bg-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
 
               {/* Promo Code */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
                   Promo code
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap sm:flex-nowrap">
                   <input
                     type="text"
                     name="promoCode"
@@ -175,13 +176,13 @@ export default function Checkout() {
                     value={formData.promoCode}
                     onChange={handleInputChange}
                     disabled={promoApplied}
-                    className="input-field flex-1"
+                    className="flex-1 min-w-0 px-3 py-1.5 text-sm bg-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <button
                     type="button"
                     onClick={handleApplyPromo}
                     disabled={promoLoading || promoApplied}
-                    className={`px-6 py-2.5 rounded font-medium ${
+                    className={`px-4 py-1.5 rounded font-medium text-sm whitespace-nowrap flex-shrink-0 ${
                       promoApplied
                         ? 'bg-green-500 text-white'
                         : 'bg-black text-white hover:bg-gray-800'
@@ -191,25 +192,25 @@ export default function Checkout() {
                   </button>
                 </div>
                 {promoError && (
-                  <p className="text-red-500 text-sm mt-1">{promoError}</p>
+                  <p className="text-red-500 text-xs mt-1">{promoError}</p>
                 )}
                 {promoApplied && (
-                  <p className="text-green-600 text-sm mt-1">
+                  <p className="text-green-600 text-xs mt-1">
                     Promo code applied! You saved ₹{discount}
                   </p>
                 )}
               </div>
 
               {/* Terms Checkbox */}
-              <div className="flex items-start">
+              <div className="flex items-start pt-1">
                 <input
                   type="checkbox"
                   name="agreedToTerms"
                   checked={formData.agreedToTerms}
                   onChange={handleInputChange}
-                  className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  className="mt-0.5 h-3.5 w-3.5 text-primary focus:ring-primary border-gray-300 rounded"
                 />
-                <label className="ml-2 text-sm text-gray-600">
+                <label className="ml-2 text-xs text-gray-700">
                   I agree to the terms and safety policy
                 </label>
               </div>
@@ -217,58 +218,58 @@ export default function Checkout() {
           </div>
 
           {/* Right Section - Summary */}
-          <div className="card p-6">
-            <div className="space-y-4">
+          <div className="bg-gray-100 rounded-lg p-5 lg:min-h-[320px]">
+            <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Experience</span>
-                <span className="font-medium text-right">{experience.title}</span>
+                <span className="text-gray-600 text-xs">Experience</span>
+                <span className="font-medium text-xs text-right">{experience.title}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Date</span>
-                <span className="font-medium">{formatDate(slot.date)}</span>
+                <span className="text-gray-600 text-xs">Date</span>
+                <span className="font-medium text-xs">{formatDate(slot.date)}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Time</span>
-                <span className="font-medium">{slot.time}</span>
+                <span className="text-gray-600 text-xs">Time</span>
+                <span className="font-medium text-xs">{slot.time}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Qty</span>
-                <span className="font-medium">{quantity}</span>
+                <span className="text-gray-600 text-xs">Qty</span>
+                <span className="font-medium text-xs">{quantity}</span>
               </div>
 
-              <hr className="border-gray-200" />
+              <hr className="border-gray-300 my-2" />
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">₹{subtotal}</span>
+                <span className="text-gray-600 text-xs">Subtotal</span>
+                <span className="font-medium text-xs">₹{subtotal}</span>
               </div>
 
               {discount > 0 && (
                 <div className="flex justify-between text-green-600">
-                  <span>Discount</span>
-                  <span className="font-medium">-₹{discount}</span>
+                  <span className="text-xs">Discount</span>
+                  <span className="font-medium text-xs">-₹{discount}</span>
                 </div>
               )}
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Taxes</span>
-                <span className="font-medium">₹{finalTaxes}</span>
+                <span className="text-gray-600 text-xs">Taxes</span>
+                <span className="font-medium text-xs">₹{finalTaxes}</span>
               </div>
 
-              <hr className="border-gray-200" />
+              <hr className="border-gray-300 my-2" />
 
               <div className="flex justify-between">
-                <span className="text-lg font-semibold">Total</span>
-                <span className="text-xl font-bold">₹{finalTotal}</span>
+                <span className="text-sm font-semibold">Total</span>
+                <span className="text-base font-bold">₹{finalTotal}</span>
               </div>
 
               <button
                 onClick={handleSubmit}
                 disabled={loading || !formData.agreedToTerms}
-                className={`w-full py-3 rounded font-medium transition-colors ${
+                className={`w-full py-2.5 rounded font-medium transition-colors text-sm mt-4 ${
                   loading || !formData.agreedToTerms
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-primary hover:bg-primary-dark text-black'
