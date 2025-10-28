@@ -11,7 +11,7 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
   return (
     <div className="card hover:shadow-md transition-shadow">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-40 overflow-hidden">
         <img
           src={experience.image_url}
           alt={experience.title}
@@ -26,23 +26,23 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold text-gray-900">{experience.title}</h3>
-          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded whitespace-nowrap">
             {experience.location}
           </span>
         </div>
 
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {experience.description}
         </p>
 
-        <div className="flex justify-between items-center">
+        <div className="flex items-center">
           <div>
             <span className="text-sm text-gray-500">From </span>
             <span className="text-lg font-bold text-gray-900">₹{experience.price}</span>
           </div>
           <button
             onClick={() => navigate(`/experience/${experience.id}`)}
-            className="btn-primary text-sm"
+            className="bg-primary hover:bg-primary-dark text-black font-medium px-3 py-2 rounded transition-colors text-sm ml-auto"
           >
             View Details
           </button>
