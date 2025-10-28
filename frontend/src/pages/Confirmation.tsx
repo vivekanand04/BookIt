@@ -15,7 +15,7 @@ export default function Confirmation() {
     <div className="min-h-screen bg-gray-50">
       <Header showSearch={false} />
 
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pt-24">
         <div className="text-center">
           {/* Success Icon */}
           <div className="flex justify-center mb-6">

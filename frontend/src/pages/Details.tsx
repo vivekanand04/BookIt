@@ -109,7 +109,7 @@ export default function Details() {
     <div className="min-h-screen bg-gray-50">
       <Header showSearch={false} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Back Button */}
         <button
           onClick={() => navigate('/')}
@@ -121,15 +121,15 @@ export default function Details() {
           Details
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6">
           {/* Left Section - Details */}
-          <div className="lg:col-span-2">
+          <div>
             {/* Image */}
             <div className="card mb-6">
               <img
                 src={experience.image_url}
                 alt={experience.title}
-                className="w-full h-80 object-cover"
+                className="w-full h-96 object-cover rounded-lg"
                 onError={(e) => {
                   e.currentTarget.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800';
                 }}
@@ -205,56 +205,56 @@ export default function Details() {
           </div>
 
           {/* Right Section - Booking Summary */}
-          <div className="lg:col-span-1">
-            <div className="card p-6 sticky top-24">
-              <div className="space-y-4">
+          <div>
+            <div className="bg-gray-100 rounded-lg p-4 sticky top-24 shadow-sm">
+              <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Starts at</span>
-                  <span className="text-xl font-bold">₹{experience.price}</span>
+                  <span className="text-gray-600 text-sm">Starts at</span>
+                  <span className="text-lg font-bold">₹{experience.price}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Quantity</span>
-                  <div className="flex items-center space-x-3">
+                  <span className="text-gray-600 text-sm">Quantity</span>
+                  <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded bg-white hover:bg-gray-50 text-sm"
                     >
                       −
                     </button>
-                    <span className="text-lg font-medium w-8 text-center">{quantity}</span>
+                    <span className="text-base font-medium w-6 text-center">{quantity}</span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded bg-white hover:bg-gray-50 text-sm"
                     >
                       +
                     </button>
                   </div>
                 </div>
 
-                <hr className="border-gray-200" />
+                <hr className="border-gray-300" />
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">₹{subtotal}</span>
+                  <span className="text-gray-600 text-sm">Subtotal</span>
+                  <span className="font-medium text-sm">₹{subtotal}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Taxes</span>
-                  <span className="font-medium">₹{taxes}</span>
+                  <span className="text-gray-600 text-sm">Taxes</span>
+                  <span className="font-medium text-sm">₹{taxes}</span>
                 </div>
 
-                <hr className="border-gray-200" />
+                <hr className="border-gray-300" />
 
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total</span>
-                  <span className="text-xl font-bold">₹{total}</span>
+                  <span className="text-base font-semibold">Total</span>
+                  <span className="text-lg font-bold">₹{total}</span>
                 </div>
 
                 <button
                   onClick={handleConfirm}
                   disabled={!selectedSlot}
-                  className={`w-full py-3 rounded font-medium transition-colors ${
+                  className={`w-full py-2.5 rounded font-medium transition-colors text-sm ${
                     selectedSlot
                       ? 'bg-primary hover:bg-primary-dark text-black'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
