@@ -269,7 +269,7 @@ export default function Details() {
                   type="button"
                   onClick={() => setDescriptionExpanded((prev) => !prev)}
                   aria-expanded={isDescriptionExpanded}
-                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                  className="mt-2 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
                 >
                   {isDescriptionExpanded ? 'Show Less' : 'Show More'}
                 </button>
@@ -306,7 +306,7 @@ export default function Details() {
                   type="button"
                   onClick={() => setDateExpanded((prev) => !prev)}
                   aria-expanded={isDateExpanded}
-                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                  className="mt-2 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
                 >
                   {isDateExpanded ? 'Show Less' : 'Show More'}
                 </button>
@@ -349,7 +349,7 @@ export default function Details() {
                   type="button"
                   onClick={() => setTimeExpanded((prev) => !prev)}
                   aria-expanded={isTimeExpanded}
-                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                  className="mt-2 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
                 >
                   {isTimeExpanded ? 'Show Less' : 'Show More'}
                 </button>
@@ -374,7 +374,7 @@ export default function Details() {
                       type="button"
                       onClick={() => setAboutExpanded((prev) => !prev)}
                       aria-expanded={isAboutExpanded}
-                      className="mt-3 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                      className="mt-3 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
                     >
                       {isAboutExpanded ? 'Show Less' : 'Show More'}
                     </button>
