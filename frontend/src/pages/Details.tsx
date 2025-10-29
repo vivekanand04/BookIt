@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -14,6 +14,22 @@ export default function Details() {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+  const [isDateExpanded, setDateExpanded] = useState(false);
+  const [isTimeExpanded, setTimeExpanded] = useState(false);
+  const [isAboutExpanded, setAboutExpanded] = useState(false);
+  const [showDescriptionToggle, setShowDescriptionToggle] = useState(false);
+  const [showDateToggle, setShowDateToggle] = useState(false);
+  const [showTimeToggle, setShowTimeToggle] = useState(false);
+  const [showAboutToggle, setShowAboutToggle] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const dateContainerRef = useRef<HTMLDivElement>(null);
+  const timeContainerRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLParagraphElement>(null);
+  const [descriptionCollapsedHeight, setDescriptionCollapsedHeight] = useState(0);
+  const [aboutCollapsedHeight, setAboutCollapsedHeight] = useState(0);
+  const [dateCollapsedHeight, setDateCollapsedHeight] = useState(0);
+  const [timeCollapsedHeight, setTimeCollapsedHeight] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -81,6 +97,112 @@ export default function Details() {
     });
   };
 
+  const { subtotal, taxes, total } = calculateTotal();
+  const availableDates = getAvailableDates();
+  const timeSlots = getTimeSlotsForDate(selectedDate);
+
+  useEffect(() => {
+    setDescriptionExpanded(false);
+    setDateExpanded(false);
+    setTimeExpanded(false);
+    setAboutExpanded(false);
+  }, [experience?.id]);
+
+  useEffect(() => {
+    if (!experience) {
+      setShowDescriptionToggle(false);
+      setShowDateToggle(false);
+      setShowTimeToggle(false);
+      setShowAboutToggle(false);
+      return;
+    }
+
+    const parseLineHeight = (element: HTMLElement) => {
+      const styles = window.getComputedStyle(element);
+      const lineHeightValue = styles.lineHeight;
+      if (lineHeightValue === 'normal') {
+        const fontSize = parseFloat(styles.fontSize || '16');
+        return fontSize ? fontSize * 1.4 : 0;
+      }
+      const parsed = parseFloat(lineHeightValue);
+      return Number.isNaN(parsed) ? 0 : parsed;
+    };
+
+    const measureTextBlock = (
+      ref: RefObject<HTMLElement>,
+      maxLines: number,
+      setCollapsedHeight: (value: number) => void,
+      setToggle: (value: boolean) => void
+    ) => {
+      const element = ref.current;
+      if (!element) {
+        setCollapsedHeight(0);
+        setToggle(false);
+        return;
+      }
+      const lineHeight = parseLineHeight(element as HTMLElement);
+      if (!lineHeight) {
+        setCollapsedHeight(0);
+        setToggle(false);
+        return;
+      }
+      const collapsedHeight = lineHeight * maxLines;
+      setCollapsedHeight(collapsedHeight);
+      setToggle(element.scrollHeight > collapsedHeight + 1);
+    };
+
+    const measureFlexContainer = (
+      ref: RefObject<HTMLDivElement>,
+      visibleRows: number,
+      setCollapsedHeight: (value: number) => void,
+      setToggle: (value: boolean) => void
+    ) => {
+      const container = ref.current;
+      if (!container) {
+        setCollapsedHeight(0);
+        setToggle(false);
+        return;
+      }
+      const firstChild = container.firstElementChild as HTMLElement | null;
+      if (!firstChild) {
+        setCollapsedHeight(0);
+        setToggle(false);
+        return;
+      }
+      const styles = window.getComputedStyle(container);
+      const gapValue = styles.rowGap || styles.gap || '0';
+      const gap = parseFloat(gapValue) || 0;
+      const rowHeight = firstChild.offsetHeight;
+      if (!rowHeight) {
+        setCollapsedHeight(0);
+        setToggle(false);
+        return;
+      }
+      const collapsedHeight = rowHeight * visibleRows + gap * (visibleRows - 1);
+      setCollapsedHeight(collapsedHeight);
+      setToggle(container.scrollHeight > collapsedHeight + 1);
+    };
+
+    const updateMeasurements = () => {
+      measureTextBlock(descriptionRef, 2, setDescriptionCollapsedHeight, setShowDescriptionToggle);
+      measureTextBlock(aboutRef, 2, setAboutCollapsedHeight, setShowAboutToggle);
+      measureFlexContainer(dateContainerRef, 1, setDateCollapsedHeight, setShowDateToggle);
+      measureFlexContainer(timeContainerRef, 2, setTimeCollapsedHeight, setShowTimeToggle);
+    };
+
+    const timeout = window.setTimeout(updateMeasurements, 0);
+    const handleResize = () => {
+      updateMeasurements();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [experience, selectedDate, timeSlots.length]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -100,10 +222,6 @@ export default function Details() {
       </div>
     );
   }
-
-  const { subtotal, taxes, total } = calculateTotal();
-  const availableDates = getAvailableDates();
-  const timeSlots = getTimeSlotsForDate(selectedDate);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -129,7 +247,7 @@ export default function Details() {
               <img
                 src={experience.image_url}
                 alt={experience.title}
-                className="w-full h-96 object-cover rounded-lg"
+                className="w-full object-cover rounded-lg sm:h-96 mobile-aspect-2-3"
                 onError={(e) => {
                   e.currentTarget.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800';
                 }}
@@ -138,12 +256,34 @@ export default function Details() {
 
             {/* Title */}
             <h1 className="text-3xl font-bold text-gray-900 mb-4">{experience.title}</h1>
-            <p className="text-gray-600 mb-6">{experience.description}</p>
+            <div className="mb-6">
+              <p
+                ref={descriptionRef}
+                className={`text-gray-600 transition-all ${!isDescriptionExpanded ? 'clamp-2' : ''}`}
+                style={!isDescriptionExpanded && descriptionCollapsedHeight ? { maxHeight: `${descriptionCollapsedHeight}px` } : undefined}
+              >
+                {experience.description}
+              </p>
+              {showDescriptionToggle && (
+                <button
+                  type="button"
+                  onClick={() => setDescriptionExpanded((prev) => !prev)}
+                  aria-expanded={isDescriptionExpanded}
+                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                >
+                  {isDescriptionExpanded ? 'Show Less' : 'Show More'}
+                </button>
+              )}
+            </div>
 
             {/* Choose Date */}
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Choose date</h2>
-              <div className="flex flex-wrap gap-3">
+              <div
+                ref={dateContainerRef}
+                className="flex flex-wrap gap-3 transition-all"
+                style={!isDateExpanded && dateCollapsedHeight ? { maxHeight: `${dateCollapsedHeight}px`, overflow: 'hidden' } : undefined}
+              >
                 {availableDates.map((date) => (
                   <button
                     key={date}
@@ -161,12 +301,26 @@ export default function Details() {
                   </button>
                 ))}
               </div>
+              {showDateToggle && (
+                <button
+                  type="button"
+                  onClick={() => setDateExpanded((prev) => !prev)}
+                  aria-expanded={isDateExpanded}
+                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                >
+                  {isDateExpanded ? 'Show Less' : 'Show More'}
+                </button>
+              )}
             </div>
 
             {/* Choose Time */}
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Choose time</h2>
-              <div className="flex flex-wrap gap-3">
+              <div
+                ref={timeContainerRef}
+                className="flex flex-wrap gap-3 transition-all"
+                style={!isTimeExpanded && timeCollapsedHeight ? { maxHeight: `${timeCollapsedHeight}px`, overflow: 'hidden' } : undefined}
+              >
                 {timeSlots.map((slot) => (
                   <button
                     key={slot.id}
@@ -190,6 +344,16 @@ export default function Details() {
                   </button>
                 ))}
               </div>
+              {showTimeToggle && (
+                <button
+                  type="button"
+                  onClick={() => setTimeExpanded((prev) => !prev)}
+                  aria-expanded={isTimeExpanded}
+                  className="mt-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                >
+                  {isTimeExpanded ? 'Show Less' : 'Show More'}
+                </button>
+              )}
               <p className="text-sm text-gray-500 mt-2">All times are in IST (GMT +5:30)</p>
             </div>
 
@@ -198,7 +362,23 @@ export default function Details() {
               <div>
                 <h2 className="text-lg font-semibold mb-3">About</h2>
                 <div className="bg-gray-100 p-4 rounded">
-                  <p className="text-gray-700 text-sm">{experience.about}</p>
+                  <p
+                    ref={aboutRef}
+                    className={`text-gray-700 text-sm transition-all ${!isAboutExpanded ? 'clamp-2' : ''}`}
+                    style={!isAboutExpanded && aboutCollapsedHeight ? { maxHeight: `${aboutCollapsedHeight}px` } : undefined}
+                  >
+                    {experience.about}
+                  </p>
+                  {showAboutToggle && (
+                    <button
+                      type="button"
+                      onClick={() => setAboutExpanded((prev) => !prev)}
+                      aria-expanded={isAboutExpanded}
+                      className="mt-3 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                    >
+                      {isAboutExpanded ? 'Show Less' : 'Show More'}
+                    </button>
+                  )}
                 </div>
               </div>
             )}
