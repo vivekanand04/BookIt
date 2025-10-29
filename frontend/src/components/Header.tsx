@@ -29,17 +29,11 @@ export default function Header({ searchQuery = '', onSearchChange, showSearch = 
             className="flex items-center cursor-pointer flex-shrink-0" 
             onClick={() => navigate('/')}
           >
-            <div className="flex items-center">
-              <div className="w-6 h-6 mr-2">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
-                </svg>
-              </div>
-              <div className="text-sm font-bold">
-                <div className="leading-none">highway</div>
-                <div className="leading-none">delite</div>
-              </div>
-            </div>
+            <img 
+              src="/heading.png" 
+              alt="highway delite" 
+              className="h-10 w-auto bg-white"
+            />
           </div>
 
           {/* Desktop Search */}
@@ -75,7 +69,7 @@ export default function Header({ searchQuery = '', onSearchChange, showSearch = 
                 </svg>
               </button>
             ) : (
-              <form onSubmit={handleSearch} className="flex items-center gap-2 flex-1">
+              <form onSubmit={handleSearch} className="flex items-center gap-2 flex-1 ml-4">
                 <input
                   type="text"
                   placeholder={isHomePage ? "Search experiences" : ""}

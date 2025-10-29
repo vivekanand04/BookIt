@@ -44,7 +44,7 @@ export default function Home() {
             <p className="text-gray-600 text-lg">No experiences found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,280px))] justify-center gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {experiences.map((experience) => (
               <ExperienceCard key={experience.id} experience={experience} />
             ))}

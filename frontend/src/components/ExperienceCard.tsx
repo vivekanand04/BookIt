@@ -9,7 +9,7 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="card hover:shadow-md transition-shadow">
+    <div className="card hover:shadow-md transition-shadow w-full">
       {/* Image */}
       <div className="relative h-40 overflow-hidden">
         <img
