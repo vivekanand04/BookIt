@@ -30,9 +30,9 @@ export default function Header({ searchQuery = '', onSearchChange, showSearch: _
             onClick={() => navigate('/')}
           >
             <img 
-              src="/heading.png" 
+              src="/heading2.png" 
               alt="highway delite" 
-              className="h-10 w-auto bg-white"
+              className="h-10 w-auto"
             />
           </div>
 
