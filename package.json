@@ -11,6 +11,7 @@
     "build:frontend": "npm run build --prefix frontend",
     "build:all": "npm run build:backend && npm run build:frontend",
     "seed": "npm run seed --prefix backend",
+    "start": "npm start --prefix backend",
     "start:backend": "npm start --prefix backend",
     "start:frontend": "npm run preview --prefix frontend"
   },
