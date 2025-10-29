@@ -3,18 +3,22 @@
   "version": "1.0.0",
   "description": "Full-stack travel booking application with experiences and slot management",
   "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "dev:backend": "npm run dev --prefix backend",
-    "dev:frontend": "npm run dev --prefix frontend",
-    "build:backend": "npm run build --prefix backend",
-    "build:frontend": "npm run build --prefix frontend",
+    "install:all": "npm install --workspace backend && npm install --workspace frontend",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "build:backend": "npm run build --workspace backend",
+    "build:frontend": "npm run build --workspace frontend",
     "build:all": "npm run build:backend && npm run build:frontend",
-    "seed": "npm run seed --prefix backend",
-    "postinstall": "npm install --include=dev --prefix backend && npm run build --prefix backend",
-    "start": "npm start --prefix backend",
-    "start:backend": "npm start --prefix backend",
-    "start:frontend": "npm run preview --prefix frontend"
+    "seed": "npm run seed --workspace backend",
+    "postinstall": "npm run build --workspace backend",
+    "start": "npm run start --workspace backend",
+    "start:backend": "npm run start --workspace backend",
+    "start:frontend": "npm run preview --workspace frontend"
   },
   "keywords": [
     "booking",
