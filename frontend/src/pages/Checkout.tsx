@@ -6,7 +6,7 @@ import { bookingApi } from '../services/api';
 export default function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { experience, slot, quantity, subtotal, taxes, total } = location.state || {};
+  const { experience, slot, quantity, subtotal } = location.state || {};
 
   const [formData, setFormData] = useState({
     fullName: '',
