@@ -278,7 +278,6 @@ This project is created as part of a fullstack internship assignment. Free to us
 
 ## 👨‍💻 Author
 
-**Your Name**
 - LinkedIn: https://www.linkedin.com/in/vivekanand04/
 - Email: vivekathirr02@gmail.com
 
