@@ -2,7 +2,7 @@
 
 A full-stack web application for exploring, booking, and managing travel experiences with real-time slot availability.
 
-## 🚀 Live Demo
+## 🚀 Live 
 
 - **Frontend**:https://bookit-frontend-zsv6.onrender.com
 - **Backend**:https://bookit-backend-1oka.onrender.com
