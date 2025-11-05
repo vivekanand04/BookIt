@@ -47,6 +47,9 @@ export default function Details() {
       if (data.slots && data.slots.length > 0) {
         const firstDate = data.slots[0].date;
         setSelectedDate(firstDate);
+      } else {
+        // If no slots from backend, set first hardcoded date
+        setSelectedDate('2024-10-22');
       }
     } catch (error) {
       console.error('Error fetching experience:', error);
@@ -98,8 +101,25 @@ export default function Details() {
   };
 
   const { subtotal, taxes, total } = calculateTotal();
-  const availableDates = getAvailableDates();
-  const timeSlots = getTimeSlotsForDate(selectedDate);
+  
+  // HARDCODED DATA FOR TESTING - Remove this once backend is working
+  const hardcodedDates = ['2024-10-22', '2024-10-23', '2024-10-24', '2024-10-25', '2024-10-26'];
+  const hardcodedTimeSlots: Slot[] = [
+    { id: 1, experience_id: 1, date: selectedDate, time: '07:00 am', available_seats: 4, total_seats: 10 },
+    { id: 2, experience_id: 1, date: selectedDate, time: '9:00 am', available_seats: 2, total_seats: 10 },
+    { id: 3, experience_id: 1, date: selectedDate, time: '11:00 am', available_seats: 5, total_seats: 10 },
+    { id: 4, experience_id: 1, date: selectedDate, time: '1:00 pm', available_seats: 0, total_seats: 10 },
+  ];
+  
+  // Use real data if available, otherwise use hardcoded
+  const availableDates = experience?.slots && experience.slots.length > 0 ? getAvailableDates() : hardcodedDates;
+  const timeSlots = experience?.slots && experience.slots.length > 0 ? getTimeSlotsForDate(selectedDate) : hardcodedTimeSlots;
+  
+  // Debug: Check if data exists
+  console.log('DEBUG - Experience:', experience);
+  console.log('DEBUG - Available Dates:', availableDates);
+  console.log('DEBUG - Selected Date:', selectedDate);
+  console.log('DEBUG - Time Slots:', timeSlots);
 
   useEffect(() => {
     setDescriptionExpanded(false);
@@ -186,8 +206,6 @@ export default function Details() {
     const updateMeasurements = () => {
       measureTextBlock(descriptionRef, 2, setDescriptionCollapsedHeight, setShowDescriptionToggle);
       measureTextBlock(aboutRef, 2, setAboutCollapsedHeight, setShowAboutToggle);
-      measureFlexContainer(dateContainerRef, 1, setDateCollapsedHeight, setShowDateToggle);
-      measureFlexContainer(timeContainerRef, 2, setTimeCollapsedHeight, setShowTimeToggle);
     };
 
     const timeout = window.setTimeout(updateMeasurements, 0);
@@ -201,7 +219,7 @@ export default function Details() {
       window.clearTimeout(timeout);
       window.removeEventListener('resize', handleResize);
     };
-  }, [experience, selectedDate, timeSlots.length]);
+  }, [experience]);
 
   if (loading) {
     return (
@@ -279,81 +297,63 @@ export default function Details() {
             {/* Choose Date */}
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Choose date</h2>
-              <div
-                ref={dateContainerRef}
-                className="flex flex-wrap gap-3 transition-all"
-                style={!isDateExpanded && dateCollapsedHeight ? { maxHeight: `${dateCollapsedHeight}px`, overflow: 'hidden' } : undefined}
-              >
-                {availableDates.map((date) => (
-                  <button
-                    key={date}
-                    onClick={() => {
-                      setSelectedDate(date);
-                      setSelectedSlot(null);
-                    }}
-                    className={`px-4 py-2 rounded border ${
-                      selectedDate === date
-                        ? 'bg-primary border-primary text-black font-medium'
-                        : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                    }`}
-                  >
-                    {formatDate(date)}
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-3 min-h-[44px]">
+                {availableDates.length > 0 ? (
+                  availableDates.map((date) => (
+                    <button
+                      key={date}
+                      onClick={() => {
+                        setSelectedDate(date);
+                        setSelectedSlot(null);
+                      }}
+                      className={`px-4 py-2 rounded border ${
+                        selectedDate === date
+                          ? 'bg-primary border-primary text-black font-medium'
+                          : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {formatDate(date)}
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">No available dates. Check console for debug info.</p>
+                )}
               </div>
-              {showDateToggle && (
-                <button
-                  type="button"
-                  onClick={() => setDateExpanded((prev) => !prev)}
-                  aria-expanded={isDateExpanded}
-                  className="mt-2 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
-                >
-                  {isDateExpanded ? 'Show Less' : 'Show More'}
-                </button>
-              )}
             </div>
 
             {/* Choose Time */}
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">Choose time</h2>
-              <div
-                ref={timeContainerRef}
-                className="flex flex-wrap gap-3 transition-all"
-                style={!isTimeExpanded && timeCollapsedHeight ? { maxHeight: `${timeCollapsedHeight}px`, overflow: 'hidden' } : undefined}
-              >
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot.id}
-                    onClick={() => slot.available_seats > 0 && setSelectedSlot(slot)}
-                    disabled={slot.available_seats === 0}
-                    className={`px-4 py-2 rounded border relative ${
-                      selectedSlot?.id === slot.id
-                        ? 'bg-primary border-primary text-black font-medium'
-                        : slot.available_seats === 0
-                        ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                        : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                    }`}
-                  >
-                    {slot.time}
-                    {slot.available_seats > 0 && slot.available_seats < 5 && (
-                      <span className="ml-2 text-xs text-red-500">{slot.available_seats} left</span>
-                    )}
-                    {slot.available_seats === 0 && (
-                      <span className="ml-2 text-xs">Sold out</span>
-                    )}
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-3 min-h-[44px]">
+                {!selectedDate ? (
+                  <p className="text-sm text-gray-500">Please select a date first</p>
+                ) : timeSlots.length > 0 ? (
+                  timeSlots.map((slot) => (
+                    <button
+                      key={slot.id}
+                      onClick={() => slot.available_seats > 0 && setSelectedSlot(slot)}
+                      disabled={slot.available_seats === 0}
+                      className={`px-4 py-2 rounded border ${
+                        selectedSlot?.id === slot.id
+                          ? 'bg-primary border-primary text-black font-medium'
+                          : slot.available_seats === 0
+                          ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                          : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {slot.time}
+                      {slot.available_seats > 0 && slot.available_seats < 5 && (
+                        <span className="ml-2 text-xs text-red-500">{slot.available_seats} left</span>
+                      )}
+                      {slot.available_seats === 0 && (
+                        <span className="ml-2 text-xs">Sold out</span>
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">No time slots available. Check console for debug info.</p>
+                )}
               </div>
-              {showTimeToggle && (
-                <button
-                  type="button"
-                  onClick={() => setTimeExpanded((prev) => !prev)}
-                  aria-expanded={isTimeExpanded}
-                  className="mt-2 text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none"
-                >
-                  {isTimeExpanded ? 'Show Less' : 'Show More'}
-                </button>
-              )}
               <p className="text-sm text-gray-500 mt-2">All times are in IST (GMT +5:30)</p>
             </div>
 
