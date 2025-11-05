@@ -15,21 +15,13 @@ export default function Details() {
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
-  const [isDateExpanded, setDateExpanded] = useState(false);
-  const [isTimeExpanded, setTimeExpanded] = useState(false);
   const [isAboutExpanded, setAboutExpanded] = useState(false);
   const [showDescriptionToggle, setShowDescriptionToggle] = useState(false);
-  const [showDateToggle, setShowDateToggle] = useState(false);
-  const [showTimeToggle, setShowTimeToggle] = useState(false);
   const [showAboutToggle, setShowAboutToggle] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
-  const dateContainerRef = useRef<HTMLDivElement>(null);
-  const timeContainerRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLParagraphElement>(null);
   const [descriptionCollapsedHeight, setDescriptionCollapsedHeight] = useState(0);
   const [aboutCollapsedHeight, setAboutCollapsedHeight] = useState(0);
-  const [dateCollapsedHeight, setDateCollapsedHeight] = useState(0);
-  const [timeCollapsedHeight, setTimeCollapsedHeight] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -123,16 +115,12 @@ export default function Details() {
 
   useEffect(() => {
     setDescriptionExpanded(false);
-    setDateExpanded(false);
-    setTimeExpanded(false);
     setAboutExpanded(false);
   }, [experience?.id]);
 
   useEffect(() => {
     if (!experience) {
       setShowDescriptionToggle(false);
-      setShowDateToggle(false);
-      setShowTimeToggle(false);
       setShowAboutToggle(false);
       return;
     }
@@ -169,38 +157,6 @@ export default function Details() {
       const collapsedHeight = lineHeight * maxLines;
       setCollapsedHeight(collapsedHeight);
       setToggle(element.scrollHeight > collapsedHeight + 1);
-    };
-
-    const measureFlexContainer = (
-      ref: RefObject<HTMLDivElement>,
-      visibleRows: number,
-      setCollapsedHeight: (value: number) => void,
-      setToggle: (value: boolean) => void
-    ) => {
-      const container = ref.current;
-      if (!container) {
-        setCollapsedHeight(0);
-        setToggle(false);
-        return;
-      }
-      const firstChild = container.firstElementChild as HTMLElement | null;
-      if (!firstChild) {
-        setCollapsedHeight(0);
-        setToggle(false);
-        return;
-      }
-      const styles = window.getComputedStyle(container);
-      const gapValue = styles.rowGap || styles.gap || '0';
-      const gap = parseFloat(gapValue) || 0;
-      const rowHeight = firstChild.offsetHeight;
-      if (!rowHeight) {
-        setCollapsedHeight(0);
-        setToggle(false);
-        return;
-      }
-      const collapsedHeight = rowHeight * visibleRows + gap * (visibleRows - 1);
-      setCollapsedHeight(collapsedHeight);
-      setToggle(container.scrollHeight > collapsedHeight + 1);
     };
 
     const updateMeasurements = () => {
