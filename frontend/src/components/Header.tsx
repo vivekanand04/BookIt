@@ -7,7 +7,7 @@ interface HeaderProps {
   showSearch?: boolean;
 }
 
-export default function Header({ searchQuery = '', onSearchChange, showSearch = true }: HeaderProps) {
+export default function Header({ searchQuery = '', onSearchChange, showSearch: _showSearch = true }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -30,12 +30,13 @@ export default function Header({ searchQuery = '', onSearchChange, showSearch = 
             onClick={() => navigate('/')}
           >
             <img 
-              src="/heading.png" 
+              src="/heading2.png" 
               alt="highway delite" 
-              className="h-10 w-auto bg-white"
+              className="h-10 w-auto"
             />
           </div>
 
+          {/* Desktop Search */}
           {/* Desktop Search */}
           <div className="hidden md:flex items-center gap-3 flex-1 justify-end">
             <form onSubmit={handleSearch} className="flex items-center gap-3">

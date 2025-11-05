@@ -2,25 +2,12 @@
 
 A full-stack web application for exploring, booking, and managing travel experiences with real-time slot availability.
 
-## 🚀 Live Demo
+## 🚀 Live 
 
-- **Frontend**: [Your Vercel URL]
-- **Backend**: [Your Render/Railway URL]
-- **API Docs**: `[Backend URL]/api`
+- **Frontend**:https://bookit-frontend-zsv6.onrender.com
+- **Backend**:https://bookit-backend-1oka.onrender.com
 
-## 📋 Table of Contents
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Running Locally](#running-locally)
-- [Database Setup](#database-setup)
-- [API Endpoints](#api-endpoints)
-- [Deployment](#deployment)
-- [Screenshots](#screenshots)
 
 ## ✨ Features
 
@@ -59,9 +46,9 @@ A full-stack web application for exploring, booking, and managing travel experie
 - **Tools**: tsx (for development), uuid (reference ID generation)
 
 ### DevOps & Deployment
-- **Frontend Hosting**: Vercel / Netlify
-- **Backend Hosting**: Render / Railway / AWS
-- **Database Hosting**: Railway / Supabase / AWS RDS
+- **Frontend Hosting**: Render
+- **Backend Hosting**: Render
+- **Database Hosting**: Neon
 - **Version Control**: Git & GitHub
 
 ## 📁 Project Structure
@@ -249,117 +236,7 @@ Frontend will run on: `http://localhost:3000`
 5. Select a date and time slot
 6. Complete the booking flow
 
-## 🌐 API Endpoints
 
-### Experiences
-
-| Method | Endpoint | Description | Query Params |
-|--------|----------|-------------|--------------|
-| GET | `/api/experiences` | Get all experiences | `search` (optional) |
-| GET | `/api/experiences/:id` | Get experience by ID with slots | - |
-
-### Bookings
-
-| Method | Endpoint | Description | Body |
-|--------|----------|-------------|------|
-| POST | `/api/bookings` | Create a new booking | `{ experience_id, slot_id, full_name, email, quantity, promo_code? }` |
-
-### Promo Codes
-
-| Method | Endpoint | Description | Body |
-|--------|----------|-------------|------|
-| POST | `/api/promo/validate` | Validate promo code | `{ code, subtotal }` |
-
-### Example API Calls
-
-**Get All Experiences:**
-```bash
-curl http://localhost:5000/api/experiences
-```
-
-**Search Experiences:**
-```bash
-curl "http://localhost:5000/api/experiences?search=kayak"
-```
-
-**Create Booking:**
-```bash
-curl -X POST http://localhost:5000/api/bookings \
-  -H "Content-Type: application/json" \
-  -d '{
-    "experience_id": 1,
-    "slot_id": 5,
-    "full_name": "John Doe",
-    "email": "john@example.com",
-    "quantity": 2,
-    "promo_code": "SAVE10"
-  }'
-```
-
-## 📤 Deployment
-
-### Deploy Backend (Render)
-
-1. **Create Account**: Sign up at [render.com](https://render.com)
-
-2. **Create Web Service**:
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Configure:
-     - **Name**: bookit-backend
-     - **Environment**: Node
-     - **Build Command**: `cd backend && npm install && npm run build`
-     - **Start Command**: `cd backend && npm start`
-
-3. **Add Environment Variables**:
-   - `DATABASE_URL`: Your PostgreSQL connection string
-   - `NODE_ENV`: production
-   - `PORT`: 5000
-
-4. **Deploy**: Click "Create Web Service"
-
-5. **Seed Database**:
-   ```bash
-   # In Render shell
-   cd backend && npm run seed
-   ```
-
-### Deploy Frontend (Vercel)
-
-1. **Install Vercel CLI**:
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Deploy**:
-   ```bash
-   cd frontend
-   vercel
-   ```
-
-3. **Configure**:
-   - Framework Preset: Vite
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-   - Install Command: `npm install`
-
-4. **Add Environment Variables**:
-   - Go to Project Settings → Environment Variables
-   - Add: `VITE_API_URL` = `https://your-backend-url.com/api`
-
-5. **Redeploy**: `vercel --prod`
-
-### Alternative Deployment Options
-
-#### Backend Alternatives
-- **Railway**: Similar to Render, easier PostgreSQL integration
-- **AWS EC2**: More control, requires more setup
-- **Heroku**: Simple deployment with Heroku Postgres
-
-#### Frontend Alternatives
-- **Netlify**: Similar to Vercel
-- **GitHub Pages**: Free for static sites
-- **AWS S3 + CloudFront**: Scalable, cost-effective
 
 ## 🎨 Design Fidelity
 
@@ -391,76 +268,9 @@ Use these promo codes during checkout:
    - Check terms box
 4. **Confirmation**: Note the reference ID (e.g., HUF56&SO)
 
-### Verify Database
-
-```sql
--- Check experiences
-SELECT * FROM experiences;
-
--- Check available slots
-SELECT * FROM slots WHERE available_seats > 0;
-
--- Check bookings
-SELECT * FROM bookings ORDER BY booking_date DESC;
-
--- Check promo codes
-SELECT * FROM promo_codes WHERE is_active = true;
-```
 
 ## 🐛 Troubleshooting
 
-### Backend Issues
-
-**Database Connection Error:**
-```bash
-Error: connect ECONNREFUSED 127.0.0.1:5432
-```
-**Solution**: Ensure PostgreSQL is running:
-```bash
-# macOS
-brew services start postgresql
-
-# Windows
-pg_ctl -D "C:\Program Files\PostgreSQL\14\data" start
-
-# Linux
-sudo systemctl start postgresql
-```
-
-**Port Already in Use:**
-```bash
-Error: listen EADDRINUSE: address already in use :::5000
-```
-**Solution**: Change port in `.env` or kill the process:
-```bash
-# macOS/Linux
-lsof -ti:5000 | xargs kill -9
-
-# Windows
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-```
-
-### Frontend Issues
-
-**API Connection Error:**
-```
-AxiosError: Network Error
-```
-**Solution**: 
-- Verify backend is running on port 5000
-- Check `VITE_API_URL` in `.env`
-- Ensure CORS is enabled in backend
-
-**Build Error:**
-```bash
-Module not found: Can't resolve 'react-router-dom'
-```
-**Solution**: Reinstall dependencies:
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
 
 ## 📝 License
 
@@ -468,16 +278,9 @@ This project is created as part of a fullstack internship assignment. Free to us
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
+- LinkedIn: https://www.linkedin.com/in/vivekanand04/
+- Email: vivekathirr02@gmail.com
 
-## 🙏 Acknowledgments
-
-- Images from [Unsplash](https://unsplash.com) and [Pexels](https://pexels.com)
-- Design inspiration from Highway Delite
-- Icons from [Heroicons](https://heroicons.com)
 
 ## 📚 Additional Resources
 
